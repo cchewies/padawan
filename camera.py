@@ -6,7 +6,7 @@ cap = None
 # Brightness + threshold tuning
 BRIGHTNESS_FACTOR = 1.0   # <1 = darker
 COL_THRESHOLD = 70           # 0–255
-THRESHOLD = 100           # 0–255
+THRESHOLD = 130           # 0–255
 
 def init():
     global cap
@@ -38,10 +38,10 @@ def get_hitbox():
     dark = np.clip(gray * BRIGHTNESS_FACTOR, 0, 255).astype(np.uint8)
 
     # Bright-pixel hitbox (boolean array)
-    # hitbox   = (r > COL_THRESHOLD) & (r > g) & (r > b)
-    # hitbox = (g > COL_THRESHOLD) & (g > r) & (g > b)
-    # hitbox  = (b > THRESHOLD) & (b > g) & (b > r)
-    hitbox = dark >= THRESHOLD
+    hitbox   = (r > COL_THRESHOLD) & (r > g) & (r > b)
+    #hitbox = (g > COL_THRESHOLD) & (g > r) & (g > b)
+    #hitbox  = (b > THRESHOLD) & (b > g) & (b > r)
+    #hitbox = dark >= THRESHOLD
 
     # Quit
     if cv2.waitKey(1) & 0xFF == ord('q'):

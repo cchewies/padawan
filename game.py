@@ -7,7 +7,7 @@ import numpy as np
 # -------- Game config --------
 GAME_W, GAME_H = 1920, 1080      # window size
 HITBOX_W, HITBOX_H = 240, 135    # downsized hitbox for collision
-SPAWN_INTERVAL = 0.7              # seconds between bolts
+SPAWN_INTERVAL = 0.8             # seconds between bolts
 BOLT_BASE_RADIUS = 0.15
 BOLT_SPEED = 500                # pixels per second toward player
 FLASH_DURATION = 0.2
@@ -24,6 +24,8 @@ flash_time = 0
 
 # Create game window
 cv2.namedWindow("Game", cv2.WINDOW_NORMAL)
+cv2.setWindowProperty("Game", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+
 cv2.resizeWindow("Game", GAME_W, GAME_H)
 
 c.init()
@@ -115,11 +117,11 @@ while True:
             continue
 
         # Draw bolt in flight
-        cv2.circle(frame, (int(bolt.x), int(bolt.y)), radius, (255, 0, 0), -1)
+        cv2.circle(frame, (int(bolt.x), int(bolt.y)), radius, (0, 255, 255), -1)
 
     # ---- Overlay hitbox on top (directly on frame) ----
     hit_overlay = cv2.resize(small_hitbox.astype(np.uint8)*255, (GAME_W, GAME_H))
-    frame[:, :, 1] = np.maximum(frame[:, :, 1], hit_overlay)  # green channel
+    frame = np.maximum(frame, hit_overlay[:, :, None])
     alpha_hit = 0.5
     frame = cv2.addWeighted(frame, 1, frame, alpha_hit, 0)
 
