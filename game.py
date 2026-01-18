@@ -6,12 +6,13 @@ import numpy as np
 
 # -------- Game config --------
 GAME_W, GAME_H = 1920, 1080      # window size
-HITBOX_W, HITBOX_H = 480, 270    # downsized hitbox for collision
-SPAWN_INTERVAL = 1              # seconds between bolts
-BOLT_BASE_RADIUS = 0.2
-BOLT_SPEED = 400                # pixels per second toward player
+HITBOX_W, HITBOX_H = 240, 135    # downsized hitbox for collision
+SPAWN_INTERVAL = 0.7              # seconds between bolts
+BOLT_BASE_RADIUS = 0.15
+BOLT_SPEED = 500                # pixels per second toward player
 FLASH_DURATION = 0.2
-MARGIN = 130
+MARGIN = int((HITBOX_H - 5) / 2)
+CLAMP_MARGIN = 20
 VX = 200
 VY = 130
 GROWTH_COEFF = 7
@@ -47,8 +48,8 @@ class Bolt:
         self.y += self.vy * dt
 
         # Clamp to window bounds
-        self.x = np.clip(self.x, 0, GAME_W-1)
-        self.y = np.clip(self.y, 0, GAME_H-1)
+        self.x = np.clip(self.x, CLAMP_MARGIN, GAME_W-1-CLAMP_MARGIN)
+        self.y = np.clip(self.y, CLAMP_MARGIN, GAME_H-1-CLAMP_MARGIN)
 
     def get_radius(self):
         fraction_traveled = 1 - self.z / self.z_initial
